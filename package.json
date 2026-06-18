@@ -1,13 +1,37 @@
 {
   "name": "adi-charts",
-  "version": "1.0.0",
-  "main": "./dist/adi-charts.umd.js",
-  "module": "./dist/adi-charts.es.js",
-  "files": ["dist"],
+  "version": "1.0.1",
+  "main": "./dist/adi-charts.index.es.js",
+  "module": "./dist/adi-charts.index.es.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/adi-charts.index.es.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./LineChart": {
+      "import": "./dist/adi-charts.LineChart.es.js",
+      "types": "./dist/LineChart.d.ts"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false,
   "peerDependencies": {
     "vue": "^3.0.0"
   },
   "scripts": {
-    "build": "vite build"
+    "build": "vite build",
+    "build:types": "vue-tsc --declaration --emitDeclarationOnly --outDir dist/types",
+    "prepare": "npm run build && npm run build:types"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.7",
+    "@vue/tsconfig": "^0.9.1",
+    "typescript": "^6.0.3",
+    "unplugin-dts": "^1.0.2",
+    "vue-tsc": "^3.3.5"
   }
 }
