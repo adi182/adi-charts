@@ -1,0 +1,13 @@
+{
+  "name": "adi-charts",
+  "version": "1.0.0",
+  "main": "./dist/adi-charts.umd.js",
+  "module": "./dist/adi-charts.es.js",
+  "files": ["dist"],
+  "peerDependencies": {
+    "vue": "^3.0.0"
+  },
+  "scripts": {
+    "build": "vite build"
+  }
+}
