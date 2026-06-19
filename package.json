@@ -13,6 +13,18 @@
       "import": "./dist/adi-charts.LineChart.es.js",
       "types": "./dist/LineChart.d.ts"
     },
+     "./ADILine": {
+      "import": "./dist/adi-charts.ADILine.es.js",
+      "types": "./dist/ADILine.d.ts"
+    },
+        "./ADIChart": {
+      "import": "./dist/adi-charts.ADIChart.es.js",
+      "types": "./dist/ADIChart.d.ts"
+    },
+        "./ADIXAxis": {
+      "import": "./dist/adi-charts.ADIXAxis.es.js",
+      "types": "./dist/ADIXAxis.d.ts"
+    },
     "./package.json": "./package.json"
   },
   "files": [
