@@ -32,24 +32,24 @@ const props = defineProps({
   },
 })
 
-const x = computed(() =>
-  scaleUtc(
-    extent(props.data, (d) => d.date),
-    [props.marginLeft, props.width - props.marginRight]
-  )
-)
+// const x = computed(() =>
 
-const y = computed(() =>
-  scaleLinear(
-    [0, max(props.data, (d) => d.close) ?? 0],
-    [props.height - props.marginBottom, props.marginTop]
-  )
-)
+// )
+
+// const y = computed(() =>
+
+// )
 
 const adiChartData = ref({
   data: props.data,
-  x,
-  y,
+  x:  scaleUtc(
+    extent(props.data, (d) => d.date),
+    [props.marginLeft, props.width - props.marginRight]
+  ),
+  y: scaleLinear(
+    [0, max(props.data, (d) => d.close) ?? 0],
+    [props.height - props.marginBottom, props.marginTop]
+  ),
   width: props.width,
   height: props.height,
   marginTop: props.marginTop,
@@ -66,6 +66,7 @@ provide('adiChartData', adiChartData)
     <svg class="adi-charts__chart" :width="props.width" :height="props.height">
         <slot />
     </svg>
+    {{ adiChartData }}
 
 </template>
 
