@@ -1,6 +1,6 @@
 <script setup>
-import { provide, ref } from 'vue'
-
+import { provide, ref, computed } from 'vue'
+import { scaleUtc, scaleLinear, extent, max } from 'd3'
 const props = defineProps({
   data: {
     type: Array,
@@ -32,13 +32,45 @@ const props = defineProps({
   },
 })
 
+const x = computed(() =>
+  scaleUtc(
+    extent(props.data, (d) => d.date),
+    [props.marginLeft, props.width - props.marginRight]
+  )
+)
+
+const y = computed(() =>
+  scaleLinear(
+    [0, max(props.data, (d) => d.close) ?? 0],
+    [props.height - props.marginBottom, props.marginTop]
+  )
+)
+
 const adiChartData = ref({
-  data: props.data || [],
+  data: props.data,
+  x,
+  y,
+  width: props.width,
+  height: props.height,
+  marginTop: props.marginTop,
+  marginRight: props.marginRight,
+  marginBottom: props.marginBottom,
+  marginLeft: props.marginLeft,
 })
 
 provide('adiChartData', adiChartData)
+
 </script>
 
-<template class="adi-charts__chart">
-  <slot />
+<template>
+    <svg class="adi-charts__chart" :width="props.width" :height="props.height">
+        <slot />
+    </svg>
+
 </template>
+
+<style scoped>
+.adi-charts__chart {
+
+}
+</style>
