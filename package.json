@@ -1,6 +1,6 @@
 {
   "name": "adi-charts",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "main": "./dist/adi-charts.index.es.js",
   "module": "./dist/adi-charts.index.es.js",
   "types": "./dist/index.d.ts",
