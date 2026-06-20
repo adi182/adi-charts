@@ -7,9 +7,9 @@
 
 <script setup>
 import { ref, watch, defineProps, inject, unref, nextTick, useTemplateRef } from 'vue'
-import { select,  scaleLinear } from 'd3'
+import { select } from 'd3'
 import createScales from '../helpers/scales'
-
+import color from '../helpers/color'
 
 const props = defineProps({
   dataKey: {
@@ -43,8 +43,6 @@ const { xScale, yScale } = createScales(chartData)
   //   .domain([chartData.yMin, chartData.yMax])
   //   .range([chartData.height - chartData.marginBottom, chartData.marginTop])
 
-
-
     const barWidth = chartData.width / chartData.data.length  - 1;
 
     select(lineGroup.value).
@@ -58,7 +56,7 @@ const { xScale, yScale } = createScales(chartData)
    // .attr("width", x.bandwidth() / 2)
    .attr("width", barWidth)
     .attr("height", d => chartData.height - yScale(d[props.dataKey]) - chartData.marginBottom) // Adjust for top and bottom margins
-    .attr("fill", "steelblue");
+    .attr("fill", color(chartData.data));
 }
 
 watch(

@@ -8,9 +8,9 @@
 
 <script setup>
 import { ref, watch, defineProps, inject, unref, nextTick, useTemplateRef } from 'vue'
-import { select, scaleTime, scaleLinear} from 'd3'
+import { select } from 'd3'
 import createScales from '../helpers/scales'
-
+import color from '../helpers/color'
 const props = defineProps({
   dataKey: {
     type: String,
@@ -18,7 +18,7 @@ const props = defineProps({
   },
   color: {
     type: String,
-    default: "steelblue",
+    default: null,
   },
 })
 
@@ -59,7 +59,9 @@ const renderLine = async () => {
     .attr("cx", d => xScale(d.date))
     .attr("cy", d => yScale(d[props.dataKey]))
     .attr("r", 5)
-    .attr("fill", props.color);
+//    .attr("fill", props.color);
+    .attr("fill", props.color ? props.color : color(chartData.data));
+
 
 }
 

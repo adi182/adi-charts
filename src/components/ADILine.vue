@@ -8,7 +8,7 @@
 
 <script setup>
 import { ref, watch, defineProps, inject, unref, nextTick, useTemplateRef } from 'vue'
-import { select, line, scaleTime, scaleLinear} from 'd3'
+import { select, line } from 'd3'
 import createScales from '../helpers/scales'
 
 const props = defineProps({
