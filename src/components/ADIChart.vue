@@ -29,19 +29,19 @@ const props = defineProps({
     type: Number,
     default: 40,
   },
-  xStart: {
+  xMin: {
     type: [Number, Date, String],
     default: 0,
   },
-  xEnd: {
+  xMax: {
     type: [Number, Date, String],
     default: null,
   },
-  yStart: {
+  yMin: {
     type: [Number, Date, String],
     default: 0,
   },
-  yEnd: {
+  yMax: {
     type: [Number, Date, String],
     default: null,
   },
@@ -60,10 +60,10 @@ const adiChartData = ref({
   marginRight: props.marginRight,
   marginBottom: props.marginBottom,
   marginLeft: props.marginLeft,
-  xStart: props.xStart,
-  xEnd: props.xEnd,
-  yStart: props.yStart,
-  yEnd: props.yEnd, 
+  xMin: props.xMin,
+  xMax: props.xMax,
+  yMin: props.yMin,
+  yMax: props.yMax, 
 })
 
 provide('adiChartData', adiChartData)

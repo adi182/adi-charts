@@ -7,7 +7,8 @@
 
 <script setup>
 import { ref, watch, defineProps, inject, unref, nextTick, useTemplateRef } from 'vue'
-import { select, axisLeft, scaleLinear } from 'd3'
+import { select, axisLeft } from 'd3'
+import createScales from '../helpers/scales'
 
 const props = defineProps({
   ticks: {
@@ -28,8 +29,8 @@ const adiChartData = inject('adiChartData', ref({
   width: 0,
   height: 0,
   marginBottom: 0,
-  yStart: 0,
-  yEnd: 1, 
+  yMin: 0,
+  yMax: 1, 
 }))
 
 const axisGroup = useTemplateRef('axisGroup')
@@ -39,13 +40,11 @@ const renderAxis = async () => {
 
   const chartData = unref(adiChartData)
 
-  const y = scaleLinear([chartData.yStart, chartData.yEnd],
-    [chartData.height - chartData.marginBottom, chartData.marginTop]
-  )
+  const { yScale } = createScales(chartData)
 
     select(axisGroup.value)
     .attr("transform", `translate(${chartData.marginLeft},0)`)
-    .call(axisLeft(y).ticks(chartData.height / 40))
+    .call(axisLeft(yScale).ticks(chartData.height / 40))
 
      if (props.showLines) {
       select(axisGroup.value).call(g => g.selectAll(".tick line").clone()

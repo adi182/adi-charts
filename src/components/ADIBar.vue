@@ -7,7 +7,8 @@
 
 <script setup>
 import { ref, watch, defineProps, inject, unref, nextTick, useTemplateRef } from 'vue'
-import { select, scaleBand,  scaleLinear } from 'd3'
+import { select,  scaleLinear } from 'd3'
+import createScales from '../helpers/scales'
 
 
 const props = defineProps({
@@ -22,10 +23,10 @@ const adiChartData = inject('adiChartData', ref({
   width: 0,
   height: 0,
   marginBottom: 0,
-  xStart: 0,
-  xEnd: 1,
-  yStart: 0,
-  yEnd: 1, 
+  xMin: 0,
+  xMax: 1,
+  yMin: 0,
+  yMax: 1, 
 }))
 
 const lineGroup = useTemplateRef('lineGroup')
@@ -36,26 +37,27 @@ const renderLine = async () => {
 
   if (!lineGroup.value || !props.dataKey) return
 
-const x = scaleBand()
-  .domain(chartData.data.map(d => d.date))
-  .range([chartData.marginLeft, chartData.width - chartData.marginRight])
-  .padding(0.1)
-// Y-axis scale for the count
-const y = scaleLinear()
-    .domain([chartData.yStart, chartData.yEnd])
-    .range([chartData.height - chartData.marginBottom, chartData.marginTop])
+const { xScale, yScale } = createScales(chartData)
 
-    
+  // const y = scaleLinear()
+  //   .domain([chartData.yMin, chartData.yMax])
+  //   .range([chartData.height - chartData.marginBottom, chartData.marginTop])
+
+
+
+    const barWidth = chartData.width / chartData.data.length  - 1;
+
     select(lineGroup.value).
     selectAll("rect")
     .data(chartData.data)
     .join("rect")
-    .attr("x", d => x(d.date))
-    .attr("y", d => y(d[props.dataKey]))
-    .attr("ex", d => (d.date))
-    .attr("wi", d => (d[props.dataKey]))
-    .attr("width", x.bandwidth()) // 
-    .attr("height", d => chartData.height - y(d[props.dataKey]) - chartData.marginBottom) // Adjust for top and bottom margins
+    .attr("x", d => xScale(d.date) ) // Center the bar on the date
+    .attr("y", d => yScale(d[props.dataKey]))
+     .attr("ex", d => (d.date))
+     .attr("wi", d => (d[props.dataKey]))
+   // .attr("width", x.bandwidth() / 2)
+   .attr("width", barWidth)
+    .attr("height", d => chartData.height - yScale(d[props.dataKey]) - chartData.marginBottom) // Adjust for top and bottom margins
     .attr("fill", "steelblue");
 }
 

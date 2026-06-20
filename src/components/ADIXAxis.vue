@@ -7,7 +7,9 @@
 
 <script setup>
 import { ref, watch, defineProps, inject, unref, nextTick, useTemplateRef } from 'vue'
-import { select, axisBottom, scaleTime } from 'd3'
+import { select, axisBottom } from 'd3'
+import createScales from '../helpers/scales'
+
 
 const props = defineProps({
   ticks: {
@@ -20,8 +22,8 @@ const adiChartData = inject('adiChartData', ref({
   width: 0,
   height: 0,
   marginBottom: 0,
-  xStart: 0,
-  xEnd: 1, 
+  xMin: 0,
+  xMax: 1, 
 }))
 
 const axisGroup = useTemplateRef('axisGroup')
@@ -31,12 +33,15 @@ const renderAxis = async () => {
 
   const chartData = unref(adiChartData)
 
-  const x = scaleTime()
-  .domain([chartData.xStart, chartData.xEnd])
-  .range([chartData.marginLeft, chartData.width - chartData.marginRight])
-  
-  select(axisGroup.value).attr("transform", `translate(0,${chartData.height - chartData.marginBottom})`)
-      .call(axisBottom(x).ticks(chartData.width / 80).tickSizeOuter(0));
+  const { xScale } = createScales(chartData)
+
+  select(axisGroup.value)
+  .attr("transform", `translate(0,${chartData.height - chartData.marginBottom})`)
+  .call(
+    axisBottom(xScale)
+    .ticks(chartData.width / 80)
+  //.tickValues(chartData.data.map(d => d.date))
+    .tickSizeOuter(0));
 }
 
 watch(
