@@ -1,6 +1,6 @@
 {
   "name": "adi-charts",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "main": "./dist/adi-charts.index.es.js",
   "module": "./dist/adi-charts.index.es.js",
   "types": "./dist/index.d.ts",
@@ -13,15 +13,15 @@
       "import": "./dist/adi-charts.LineChart.es.js",
       "types": "./dist/LineChart.d.ts"
     },
-     "./ADILine": {
+    "./ADILine": {
       "import": "./dist/adi-charts.ADILine.es.js",
       "types": "./dist/ADILine.d.ts"
     },
-        "./ADIChart": {
+    "./ADIChart": {
       "import": "./dist/adi-charts.ADIChart.es.js",
       "types": "./dist/ADIChart.d.ts"
     },
-        "./ADIXAxis": {
+    "./ADIXAxis": {
       "import": "./dist/adi-charts.ADIXAxis.es.js",
       "types": "./dist/ADIXAxis.d.ts"
     },
@@ -37,14 +37,24 @@
   "scripts": {
     "build": "vite build",
     "build:types": "vue-tsc --declaration --emitDeclarationOnly --outDir dist/types",
-    "prepare": "npm run build && npm run build:types"
+    "prepare": "npm run build && npm run build:types",
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.mts,.mtsx --fix",
+    "format": "prettier --write \"src/**/*.{vue,ts,js,json,css,scss}\""
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@vitejs/plugin-vue": "^6.0.7",
+    "@vue/eslint-config-typescript": "^14.8.0",
     "@vue/tsconfig": "^0.9.1",
+    "d3": "^7.8.5",
+    "eslint": "^10.5.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.6",
+    "eslint-plugin-vue": "^10.9.2",
+    "prettier": "^3.8.4",
     "typescript": "^6.0.3",
+    "typescript-eslint": "^8.61.1",
     "unplugin-dts": "^1.0.2",
-    "vue-tsc": "^3.3.5",
-    "d3": "^7.8.5"
+    "vue-tsc": "^3.3.5"
   }
 }

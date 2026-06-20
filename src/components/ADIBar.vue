@@ -1,14 +1,14 @@
 <template>
-  <path
+  <g
     ref="lineGroup"
-    class="adi-charts__line"
-    d=""
-  />
+    class="adi-charts__bar"
+  /> 
 </template>
 
 <script setup>
 import { ref, watch, defineProps, inject, unref, nextTick, useTemplateRef } from 'vue'
-import { select, line, scaleTime, scaleLinear} from 'd3'
+import { select, scaleBand,  scaleLinear } from 'd3'
+
 
 const props = defineProps({
   dataKey: {
@@ -34,24 +34,29 @@ const renderLine = async () => {
   await nextTick()
   const chartData = unref(adiChartData)
 
-  if (!lineGroup.value || !props.dataKey || !chartData.data) return
+  if (!lineGroup.value || !props.dataKey) return
 
-  const x = scaleTime()
-  .domain([chartData.xStart, chartData.xEnd])
+const x = scaleBand()
+  .domain(chartData.data.map(d => d.date))
   .range([chartData.marginLeft, chartData.width - chartData.marginRight])
+  .padding(0.1)
+// Y-axis scale for the count
+const y = scaleLinear()
+    .domain([chartData.yStart, chartData.yEnd])
+    .range([chartData.height - chartData.marginBottom, chartData.marginTop])
 
-  const y = scaleLinear([chartData.yStart, chartData.yEnd],
-    [chartData.height - chartData.marginBottom, chartData.marginTop]
-  )
-
-   const Renderline = line()
-      .x(d => x(d.date))
-      .y(d => y(d[props.dataKey]));
-
-     select(lineGroup.value).attr("fill", "none")
-       .attr("stroke", "steelblue")
-       .attr("stroke-width", 1.5)
-       .attr("d", Renderline(chartData.data));
+    
+    select(lineGroup.value).
+    selectAll("rect")
+    .data(chartData.data)
+    .join("rect")
+    .attr("x", d => x(d.date))
+    .attr("y", d => y(d[props.dataKey]))
+    .attr("ex", d => (d.date))
+    .attr("wi", d => (d[props.dataKey]))
+    .attr("width", x.bandwidth()) // 
+    .attr("height", d => chartData.height - y(d[props.dataKey]) - chartData.marginBottom) // Adjust for top and bottom margins
+    .attr("fill", "steelblue");
 }
 
 watch(

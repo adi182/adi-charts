@@ -1,6 +1,5 @@
 <script setup>
-import { provide, ref, computed } from 'vue'
-import { scaleUtc, scaleLinear, extent, max } from 'd3'
+import { provide, ref } from 'vue'
 const props = defineProps({
   data: {
     type: Array,
@@ -30,32 +29,41 @@ const props = defineProps({
     type: Number,
     default: 40,
   },
+  xStart: {
+    type: [Number, Date, String],
+    default: 0,
+  },
+  xEnd: {
+    type: [Number, Date, String],
+    default: null,
+  },
+  yStart: {
+    type: [Number, Date, String],
+    default: 0,
+  },
+  yEnd: {
+    type: [Number, Date, String],
+    default: null,
+  },
 })
 
-// const x = computed(() =>
-
-// )
-
-// const y = computed(() =>
-
-// )
+const parsedData = props.data.map(d => ({
+  ...d,
+  date: new Date(d.date)
+}));
 
 const adiChartData = ref({
-  data: props.data,
-  x:  scaleUtc(
-    extent(props.data, (d) => d.date),
-    [props.marginLeft, props.width - props.marginRight]
-  ),
-  y: scaleLinear(
-    [0, max(props.data, (d) => d.close) ?? 0],
-    [props.height - props.marginBottom, props.marginTop]
-  ),
+  data: parsedData,
   width: props.width,
   height: props.height,
   marginTop: props.marginTop,
   marginRight: props.marginRight,
   marginBottom: props.marginBottom,
   marginLeft: props.marginLeft,
+  xStart: props.xStart,
+  xEnd: props.xEnd,
+  yStart: props.yStart,
+  yEnd: props.yEnd, 
 })
 
 provide('adiChartData', adiChartData)
@@ -63,11 +71,14 @@ provide('adiChartData', adiChartData)
 </script>
 
 <template>
-    <svg class="adi-charts__chart" :width="props.width" :height="props.height">
-        <slot />
-    </svg>
-    {{ adiChartData }}
-
+  <svg
+    class="adi-charts__chart"
+    :width="props.width"
+    :height="props.height"
+  >
+    <slot />
+  </svg>
+  props <pre> {{ props }} </pre>
 </template>
 
 <style scoped>

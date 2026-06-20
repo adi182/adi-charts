@@ -2,13 +2,12 @@
   <g
     ref="axisGroup"
     class="adi-charts__x-axis"
-    :transform="`translate(0,${adiChartData.height - adiChartData.marginBottom})`"
-  ></g>
+  />
 </template>
 
 <script setup>
 import { ref, watch, defineProps, inject, unref, nextTick, useTemplateRef } from 'vue'
-import { select, axisBottom } from 'd3'
+import { select, axisBottom, scaleTime } from 'd3'
 
 const props = defineProps({
   ticks: {
@@ -21,7 +20,8 @@ const adiChartData = inject('adiChartData', ref({
   width: 0,
   height: 0,
   marginBottom: 0,
-  x: null,
+  xStart: 0,
+  xEnd: 1, 
 }))
 
 const axisGroup = useTemplateRef('axisGroup')
@@ -30,20 +30,18 @@ const renderAxis = async () => {
   await nextTick()
 
   const chartData = unref(adiChartData)
-  const xScale = chartData.x ? unref(chartData.x) : null
-  if (!axisGroup.value || !xScale) return
 
-  const axis = axisBottom(xScale)
-    .ticks(props.ticks ?? Math.max(1, Math.floor(chartData.width / 80)))
-    .tickSizeOuter(0)
-
-  select(axisGroup.value).call(axis)
+  const x = scaleTime()
+  .domain([chartData.xStart, chartData.xEnd])
+  .range([chartData.marginLeft, chartData.width - chartData.marginRight])
+  
+  select(axisGroup.value).attr("transform", `translate(0,${chartData.height - chartData.marginBottom})`)
+      .call(axisBottom(x).ticks(chartData.width / 80).tickSizeOuter(0));
 }
 
 watch(
   () => [
     axisGroup.value,
-    unref(adiChartData).x ? unref(unref(adiChartData).x) : null,
     unref(adiChartData).width,
     unref(adiChartData).height,
     unref(adiChartData).marginBottom,
