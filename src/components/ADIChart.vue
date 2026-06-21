@@ -6,27 +6,27 @@ const props = defineProps({
     default: () => [],
   },
   width: {
-    type: Number,
+    type: [Number, String],
     default: 640,
   },
   height: {
-    type: Number,
+    type: [Number, String],
     default: 400,
   },
   marginTop: {
-    type: Number,
+    type: [Number, String],
     default: 20,
   },
   marginRight: {
-    type: Number,
+    type: [Number, String],
     default: 20,
   },
   marginBottom: {
-    type: Number,
+    type: [Number, String],
     default: 30,
   },
   marginLeft: {
-    type: Number,
+    type: [Number, String],
     default: 40,
   },
   xMin: {

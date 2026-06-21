@@ -9,7 +9,6 @@ export default defineConfig({
     lib: {
       entry: {
         index: resolve(__dirname, "src/index.ts"),
-        LineChart: resolve(__dirname, "src/components/LineChart.vue"),
       },
       name: "AdiCharts",
       formats: ["es"],

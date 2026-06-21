@@ -5,13 +5,14 @@ import ADILine from "./components/ADILine.vue";
 import ADIPoints from "./components/ADIPoints.vue";
 import ADIBar from "./components/ADIBar.vue";
 import ADIYAxis from "./components/ADIYAxis.vue";
+import ADILabel from "./components/ADILabel.vue";
 
 export { 
   ADIChart, 
   ADIXAxis, 
   ADILine, 
   ADIYAxis, 
-  ADIBar, ADIPoints
+  ADIBar, ADIPoints, ADILabel
 };
 
 export function install(app: App) {
@@ -21,6 +22,7 @@ export function install(app: App) {
   app.component("ADIYAxis", ADIYAxis);
   app.component("ADIBar", ADIBar);
   app.component("ADIPoints", ADIPoints);
+  app.component("ADILabel", ADILabel);
 }
 
 export const AdiCharts = { install };

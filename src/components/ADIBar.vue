@@ -39,7 +39,7 @@ const renderBar = async () => {
   await nextTick()
   const chartData = unref(adiChartData)
 
-  if (!barGroup.value || !props.dataKey) return
+  if (!barGroup.value || !props.dataKey || !props.legendKey) return
 
   const { xScale, yScale } = createScales(chartData, props.legendKey)
 

@@ -23,10 +23,6 @@ const props = defineProps({
     type: String,
     default: "value",
   },
-  labelTop: {
-    type: String,
-    default: null,
-  },
 })
 
 const adiChartData = inject('adiChartData', ref({
@@ -43,8 +39,7 @@ const renderAxis = async () => {
   await nextTick()
 
   const chartData = unref(adiChartData)
-
-const { yScale } = createScales(chartData, props.legendKey)
+  const { yScale } = createScales(chartData, props.legendKey)
 
     select(axisGroup.value)
     .attr("transform", `translate(${chartData.marginLeft},0)`)
@@ -54,15 +49,6 @@ const { yScale } = createScales(chartData, props.legendKey)
       select(axisGroup.value).call(g => g.selectAll(".tick line").clone()
           .attr("x2", chartData.width - chartData.marginLeft - chartData.marginRight)
           .attr("stroke-opacity", 0.1))
-     }
-
-     if (props.labelTop && props.labelTop.trim() !== "") {
-      select(axisGroup.value).call(g => g.append("text")
-          .attr("x", -chartData.marginLeft)
-          .attr("y", 10)
-          .attr("fill", "currentColor")
-          .attr("text-anchor", "start")
-          .text(props.labelTop));
      }
 }
 

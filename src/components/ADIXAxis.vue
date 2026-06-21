@@ -37,7 +37,7 @@ const renderAxis = async () => {
 
   const chartData = unref(adiChartData)
 
-const { xScale } = createScales(chartData, props.legendKey)
+  const { xScale } = createScales(chartData, props.legendKey)
 
   select(axisGroup.value)
   .attr("transform", `translate(0,${chartData.height - chartData.marginBottom})`)
