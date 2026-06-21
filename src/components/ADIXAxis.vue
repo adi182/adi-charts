@@ -1,15 +1,11 @@
 <template>
-  <g
-    ref="axisGroup"
-    class="adi-charts__x-axis"
-  />
+  <g ref="axisGroup" class="adi-charts__x-axis" />
 </template>
 
 <script setup>
-import { ref, watch, defineProps, inject, unref, nextTick, useTemplateRef } from 'vue'
-import { select, axisBottom } from 'd3'
-import createScales from '../helpers/scales'
-
+import { ref, watch, defineProps, inject, unref, nextTick, useTemplateRef } from 'vue';
+import { select, axisBottom } from 'd3';
+import createScales from '../helpers/scales';
 
 const props = defineProps({
   ticks: {
@@ -18,35 +14,39 @@ const props = defineProps({
   },
   legendKey: {
     type: String,
-    default: "date",
-  }
-})
+    default: 'date',
+  },
+});
 
-const adiChartData = inject('adiChartData', ref({
-  width: 0,
-  height: 0,
-  marginBottom: 0,
-  xMin: 0,
-  xMax: 1, 
-}))
+const adiChartData = inject(
+  'adiChartData',
+  ref({
+    width: 0,
+    height: 0,
+    marginBottom: 0,
+    xMin: 0,
+    xMax: 1,
+  })
+);
 
-const axisGroup = useTemplateRef('axisGroup')
+const axisGroup = useTemplateRef('axisGroup');
 
 const renderAxis = async () => {
-  await nextTick()
+  await nextTick();
 
-  const chartData = unref(adiChartData)
+  const chartData = unref(adiChartData);
 
-  const { xScale } = createScales(chartData, props.legendKey)
+  const { xScale } = createScales(chartData, props.legendKey);
 
   select(axisGroup.value)
-  .attr("transform", `translate(0,${chartData.height - chartData.marginBottom})`)
-  .call(
-    axisBottom(xScale)
-    .ticks(chartData.width / 80)
-  //.tickValues(chartData.data.map(d => d.date))
-    .tickSizeOuter(0));
-}
+    .attr('transform', `translate(0,${chartData.height - chartData.marginBottom})`)
+    .call(
+      axisBottom(xScale)
+        .ticks(chartData.width / 80)
+        //.tickValues(chartData.data.map(d => d.date))
+        .tickSizeOuter(0)
+    );
+};
 
 watch(
   () => [
@@ -58,5 +58,5 @@ watch(
   ],
   renderAxis,
   { immediate: true, flush: 'post' }
-)
-</script>  
+);
+</script>

@@ -1,14 +1,11 @@
 <template>
-  <g
-    ref="axisGroup"
-    class="adi-charts__y-axis"
-  />
+  <g ref="axisGroup" class="adi-charts__y-axis" />
 </template>
 
 <script setup>
-import { ref, watch, defineProps, inject, unref, nextTick, useTemplateRef } from 'vue'
-import { select, axisLeft } from 'd3'
-import createScales from '../helpers/scales'
+import { ref, watch, defineProps, inject, unref, nextTick, useTemplateRef } from 'vue';
+import { select, axisLeft } from 'd3';
+import createScales from '../helpers/scales';
 
 const props = defineProps({
   ticks: {
@@ -21,36 +18,43 @@ const props = defineProps({
   },
   legendKey: {
     type: String,
-    default: "value",
+    default: 'value',
   },
-})
+});
 
-const adiChartData = inject('adiChartData', ref({
-  width: 0,
-  height: 0,
-  marginBottom: 0,
-  yMin: 0,
-  yMax: 1, 
-}))
+const adiChartData = inject(
+  'adiChartData',
+  ref({
+    width: 0,
+    height: 0,
+    marginBottom: 0,
+    yMin: 0,
+    yMax: 1,
+  })
+);
 
-const axisGroup = useTemplateRef('axisGroup')
+const axisGroup = useTemplateRef('axisGroup');
 
 const renderAxis = async () => {
-  await nextTick()
+  await nextTick();
 
-  const chartData = unref(adiChartData)
-  const { yScale } = createScales(chartData, props.legendKey)
+  const chartData = unref(adiChartData);
+  const { yScale } = createScales(chartData, props.legendKey);
 
-    select(axisGroup.value)
-    .attr("transform", `translate(${chartData.marginLeft},0)`)
-    .call(axisLeft(yScale).ticks(chartData.height / 40))
+  select(axisGroup.value)
+    .attr('transform', `translate(${chartData.marginLeft},0)`)
+    .call(axisLeft(yScale).ticks(chartData.height / 40));
 
-     if (props.showLines) {
-      select(axisGroup.value).call(g => g.selectAll(".tick line").clone()
-          .attr("x2", chartData.width - chartData.marginLeft - chartData.marginRight)
-          .attr("stroke-opacity", 0.1))
-     }
-}
+  if (props.showLines) {
+    select(axisGroup.value).call(g =>
+      g
+        .selectAll('.tick line')
+        .clone()
+        .attr('x2', chartData.width - chartData.marginLeft - chartData.marginRight)
+        .attr('stroke-opacity', 0.1)
+    );
+  }
+};
 
 watch(
   () => [
@@ -62,5 +66,5 @@ watch(
   ],
   renderAxis,
   { immediate: true, flush: 'post' }
-)
-</script>  
+);
+</script>

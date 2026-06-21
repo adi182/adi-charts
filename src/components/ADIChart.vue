@@ -1,5 +1,5 @@
 <script setup>
-import { provide, ref } from 'vue'
+import { provide, ref } from 'vue';
 const props = defineProps({
   data: {
     type: Array,
@@ -45,13 +45,13 @@ const props = defineProps({
     type: [Number, Date, String],
     default: null,
   },
-})
+});
 
 const parsedData = props.data.map(d => ({
   ...d,
   ...(d.date !== undefined && {
-    date: new Date(d.date)
-  })
+    date: new Date(d.date),
+  }),
 }));
 
 const adiChartData = ref({
@@ -65,26 +65,19 @@ const adiChartData = ref({
   xMin: props.xMin,
   xMax: props.xMax,
   yMin: props.yMin,
-  yMax: props.yMax, 
-})
+  yMax: props.yMax,
+});
 
-provide('adiChartData', adiChartData)
-
+provide('adiChartData', adiChartData);
 </script>
 
 <template>
-  <svg
-    class="adi-charts__chart"
-    :width="props.width"
-    :height="props.height"
-  >
+  <svg class="adi-charts__chart" :width="props.width" :height="props.height">
     <slot />
   </svg>
-  props <pre> {{ props }} </pre>
 </template>
 
 <style scoped>
 .adi-charts__chart {
-
 }
 </style>

@@ -1,16 +1,12 @@
 <template>
-  <g
-    ref="pointGroup"
-    class="adi-charts__points"
-    d=""
-  />
+  <g ref="pointGroup" class="adi-charts__points" d="" />
 </template>
 
 <script setup>
-import { ref, watch, defineProps, inject, unref, nextTick, useTemplateRef } from 'vue'
-import { select } from 'd3'
-import createScales from '../helpers/scales'
-import color from '../helpers/color'
+import { ref, watch, defineProps, inject, unref, nextTick, useTemplateRef } from 'vue';
+import { select } from 'd3';
+import createScales from '../helpers/scales';
+import colorGenerator from '../helpers/color';
 const props = defineProps({
   dataKey: {
     type: String,
@@ -24,50 +20,43 @@ const props = defineProps({
     type: String,
     default: null,
   },
-})
+});
 
-const adiChartData = inject('adiChartData', ref({
-  data: [],
-  width: 0,
-  height: 0,
-  marginBottom: 0,
-  xMin: 0,
-  xMax: 1,
-  yMin: 0,
-  yMax: 1, 
-}))
+const adiChartData = inject(
+  'adiChartData',
+  ref({
+    data: [],
+    width: 0,
+    height: 0,
+    marginBottom: 0,
+    xMin: 0,
+    xMax: 1,
+    yMin: 0,
+    yMax: 1,
+  })
+);
 
-const pointGroup = useTemplateRef('pointGroup')
+const pointGroup = useTemplateRef('pointGroup');
 
 const renderPoints = async () => {
-  await nextTick()
-  const chartData = unref(adiChartData)
+  await nextTick();
+  const chartData = unref(adiChartData);
 
-  if (!pointGroup.value || !props.dataKey || !chartData.data) return
+  if (!pointGroup.value || !props.dataKey || !chartData.data) return;
 
-const { xScale, yScale } = createScales(chartData, props.legendKey)
-  
-  // const x = scaleTime()
-  // .domain([chartData.xMin, chartData.xMax])
-  // .range([chartData.marginLeft, chartData.width - chartData.marginRight])
+  const { xScale, yScale } = createScales(chartData, props.legendKey);
 
-  // const y = scaleLinear([chartData.yMin, chartData.yMax],
-  //   [chartData.height - chartData.marginBottom, chartData.marginTop]
-  // )
-     select(pointGroup.value).
-     selectAll(".point")
+  select(pointGroup.value)
+    .selectAll('.point')
     .data(chartData.data)
     .enter()
-    .append("circle")
-    .attr("class", "point")
-    .attr("cx", d => xScale(d[props.legendKey]))
-    .attr("cy", d => yScale(d[props.dataKey]))
-    .attr("r", 5)
-//    .attr("fill", props.color);
-    .attr("fill", props.color ? props.color : color(chartData.data));
-
-
-}
+    .append('circle')
+    .attr('class', 'point')
+    .attr('cx', d => xScale(d[props.legendKey]))
+    .attr('cy', d => yScale(d[props.dataKey]))
+    .attr('r', 5)
+    .attr('fill', props.color ? props.color : colorGenerator(chartData.data));
+};
 
 watch(
   () => [
@@ -76,9 +65,9 @@ watch(
     unref(adiChartData).width,
     unref(adiChartData).height,
     unref(adiChartData).marginBottom,
-    props.dataKey
+    props.dataKey,
   ],
   renderPoints,
   { immediate: true, flush: 'post' }
-)
-</script>  
+);
+</script>
