@@ -16,6 +16,10 @@ const props = defineProps({
     type: String,
     default: null,
   },
+  legendKey: {
+    type: String,
+    default: null,
+  },
 })
 
 const adiChartData = inject('adiChartData', ref({
@@ -37,14 +41,14 @@ const renderLine = async () => {
 
   if (!lineGroup.value || !props.dataKey || !chartData.data) return
 
-  const { xScale, yScale } = createScales(chartData)
+const { xScale, yScale } = createScales(chartData, props.legendKey)
 
   // const y = scaleLinear([chartData.yMin, chartData.yMax],
   //   [chartData.height - chartData.marginBottom, chartData.marginTop]
   // )
 
    const Renderline = line()
-      .x(d => xScale(d.date))
+      .x(d => xScale(d[props.legendKey]))
       .y(d => yScale(d[props.dataKey]));
 
      select(lineGroup.value).attr("fill", "none")

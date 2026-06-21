@@ -16,6 +16,10 @@ const props = defineProps({
     type: Number,
     default: 1,
   },
+  legendKey: {
+    type: String,
+    default: "date",
+  }
 })
 
 const adiChartData = inject('adiChartData', ref({
@@ -33,7 +37,7 @@ const renderAxis = async () => {
 
   const chartData = unref(adiChartData)
 
-  const { xScale } = createScales(chartData)
+const { xScale } = createScales(chartData, props.legendKey)
 
   select(axisGroup.value)
   .attr("transform", `translate(0,${chartData.height - chartData.marginBottom})`)

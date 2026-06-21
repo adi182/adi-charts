@@ -1,6 +1,6 @@
 <template>
   <g
-    ref="lineGroup"
+    ref="pointGroup"
     class="adi-charts__points"
     d=""
   />
@@ -20,6 +20,10 @@ const props = defineProps({
     type: String,
     default: null,
   },
+  legendKey: {
+    type: String,
+    default: null,
+  },
 })
 
 const adiChartData = inject('adiChartData', ref({
@@ -33,15 +37,15 @@ const adiChartData = inject('adiChartData', ref({
   yMax: 1, 
 }))
 
-const lineGroup = useTemplateRef('lineGroup')
+const pointGroup = useTemplateRef('pointGroup')
 
-const renderLine = async () => {
+const renderPoints = async () => {
   await nextTick()
   const chartData = unref(adiChartData)
 
-  if (!lineGroup.value || !props.dataKey || !chartData.data) return
+  if (!pointGroup.value || !props.dataKey || !chartData.data) return
 
- const { xScale, yScale } = createScales(chartData)
+const { xScale, yScale } = createScales(chartData, props.legendKey)
   
   // const x = scaleTime()
   // .domain([chartData.xMin, chartData.xMax])
@@ -50,13 +54,13 @@ const renderLine = async () => {
   // const y = scaleLinear([chartData.yMin, chartData.yMax],
   //   [chartData.height - chartData.marginBottom, chartData.marginTop]
   // )
-     select(lineGroup.value).
+     select(pointGroup.value).
      selectAll(".point")
     .data(chartData.data)
     .enter()
     .append("circle")
     .attr("class", "point")
-    .attr("cx", d => xScale(d.date))
+    .attr("cx", d => xScale(d[props.legendKey]))
     .attr("cy", d => yScale(d[props.dataKey]))
     .attr("r", 5)
 //    .attr("fill", props.color);
@@ -67,14 +71,14 @@ const renderLine = async () => {
 
 watch(
   () => [
-    lineGroup.value,
+    pointGroup.value,
     unref(adiChartData).data,
     unref(adiChartData).width,
     unref(adiChartData).height,
     unref(adiChartData).marginBottom,
     props.dataKey
   ],
-  renderLine,
+  renderPoints,
   { immediate: true, flush: 'post' }
 )
 </script>  

@@ -1,6 +1,6 @@
 <template>
   <g
-    ref="lineGroup"
+    ref="barGroup"
     class="adi-charts__bar"
   /> 
 </template>
@@ -13,6 +13,10 @@ import color from '../helpers/color'
 
 const props = defineProps({
   dataKey: {
+    type: String,
+    default: null,
+  },
+  legendKey: {
     type: String,
     default: null,
   },
@@ -29,46 +33,41 @@ const adiChartData = inject('adiChartData', ref({
   yMax: 1, 
 }))
 
-const lineGroup = useTemplateRef('lineGroup')
+const barGroup = useTemplateRef('barGroup')
 
-const renderLine = async () => {
+const renderBar = async () => {
   await nextTick()
   const chartData = unref(adiChartData)
 
-  if (!lineGroup.value || !props.dataKey) return
+  if (!barGroup.value || !props.dataKey) return
 
-const { xScale, yScale } = createScales(chartData)
+  const { xScale, yScale } = createScales(chartData, props.legendKey)
 
-  // const y = scaleLinear()
-  //   .domain([chartData.yMin, chartData.yMax])
-  //   .range([chartData.height - chartData.marginBottom, chartData.marginTop])
+  const barWidth = props.legendKey === 'date' ? (
+    chartData.width - chartData.marginLeft - chartData.marginRight
+  ) / chartData.data.length : xScale.bandwidth();
 
-    const barWidth = chartData.width / chartData.data.length  - 1;
-
-    select(lineGroup.value).
+    select(barGroup.value).
     selectAll("rect")
     .data(chartData.data)
     .join("rect")
-    .attr("x", d => xScale(d.date) ) // Center the bar on the date
+    .attr("x", d => xScale(d[props.legendKey]))
     .attr("y", d => yScale(d[props.dataKey]))
-     .attr("ex", d => (d.date))
-     .attr("wi", d => (d[props.dataKey]))
-   // .attr("width", x.bandwidth() / 2)
-   .attr("width", barWidth)
+    .attr("width",barWidth )
     .attr("height", d => chartData.height - yScale(d[props.dataKey]) - chartData.marginBottom) // Adjust for top and bottom margins
     .attr("fill", color(chartData.data));
 }
 
 watch(
   () => [
-    lineGroup.value,
+    barGroup.value,
     unref(adiChartData).data,
     unref(adiChartData).width,
     unref(adiChartData).height,
     unref(adiChartData).marginBottom,
     props.dataKey
   ],
-  renderLine,
+  renderBar,
   { immediate: true, flush: 'post' }
 )
 </script>  

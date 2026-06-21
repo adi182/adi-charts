@@ -49,7 +49,9 @@ const props = defineProps({
 
 const parsedData = props.data.map(d => ({
   ...d,
-  date: new Date(d.date)
+  ...(d.date !== undefined && {
+    date: new Date(d.date)
+  })
 }));
 
 const adiChartData = ref({
