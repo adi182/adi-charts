@@ -15,6 +15,10 @@ const props = defineProps({
     type: String,
     default: null,
   },
+  ringRadius: {
+    type: [Number, String],
+    default: 0,
+  },
 });
 
 const adiChartData = inject(
@@ -52,7 +56,9 @@ const renderDonut = async () => {
     .sort(null)
     .value(d => d[props.dataKey]);
 
-  const arcGenerator = arc().innerRadius(0).outerRadius(radius);
+  const arcGenerator = arc()
+  .innerRadius(props.ringRadius)
+  .outerRadius(radius);
 
   const outerArc = arc()
     .innerRadius(radius * 1.15)
